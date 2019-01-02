@@ -7,10 +7,13 @@ public class RecieveDown : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Text text = gameObject.GetComponent<Text>();
-        AndroidJavaClass unityplayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        AndroidJavaObject current = unityplayer.GetStatic<AndroidJavaObject>("currentActivity");
-        text.text = current.Call<string>("sayHi", new object[] { "Viktor" });
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            Text text = gameObject.GetComponent<Text>();
+            AndroidJavaClass unityplayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaObject current = unityplayer.GetStatic<AndroidJavaObject>("currentActivity");
+            text.text = current.Call<string>("sayHi", new object[] { "Viktor" });
+        }
 	}
 
 }
