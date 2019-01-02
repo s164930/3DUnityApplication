@@ -7,7 +7,7 @@ public class RecieveFromSimon : MonoBehaviour {
     bool hasExtra;
     AndroidJavaObject intent;
     AndroidJavaObject extras;
-    public static string projectID = "1";
+    public static int projectID;
     // Use this for initialization
     void Start()
     {
@@ -16,11 +16,12 @@ public class RecieveFromSimon : MonoBehaviour {
             AndroidJavaClass UnityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
             AndroidJavaObject currentActivity = UnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
             intent = currentActivity.Call<AndroidJavaObject>("getIntent");
-            hasExtra = intent.Call<bool>("hasExtra", "arguments");
+            hasExtra = intent.Call<bool>("hasExtra", "Projectid");
             if (hasExtra)
             {
                 extras = intent.Call<AndroidJavaObject>("getExtras");
-                projectID = extras.Call<string>("getString", "arguments");
+                projectID = extras.Call<int>("getInt", "Projectid");
+                gameObject.GetComponent<Text>().text = projectID.ToString();
             }
         }
     }
