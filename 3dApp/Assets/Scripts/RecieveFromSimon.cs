@@ -7,7 +7,7 @@ public class RecieveFromSimon : MonoBehaviour {
     bool hasExtra;
     AndroidJavaObject intent;
     AndroidJavaObject extras;
-    public static int projectID;
+    public static int projectID = 1;
     // Use this for initialization
     void Start()
     {
