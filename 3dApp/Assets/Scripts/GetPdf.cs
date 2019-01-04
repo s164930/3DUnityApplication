@@ -6,9 +6,8 @@ using System.Net;
 using UnityEngine;
 
 public class GetPdf : MonoBehaviour {
-    List<PDF> pdfArray = new List<PDF>();
-
-	// Use this for initialization
+    // Use this for initialization
+    public List<PDF> pdfArray;
 	void Start () {
         var client = new RestClient("http://floorplanner-env.bsux2m9paw.eu-central-1.elasticbeanstalk.com");
         var request = new RestRequest("projects/" + RecieveFromSimon.projectID, Method.GET, DataFormat.Json);
@@ -23,9 +22,12 @@ public class GetPdf : MonoBehaviour {
 	void Update () {
         if (Input.touchCount > 0 || Input.GetKeyDown(KeyCode.Space))
         {
-             
-            byte[] stueplan = File.ReadAllBytes(@"C:\Users\Viktor\Pictures\loftplan_gennemsigtig.png");
-            byte[] soejler = File.ReadAllBytes(@"C:\Users\Viktor\Pictures\stueplan_gennemsigtig.png");
+            AndroidJavaClass unityplayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaObject currentAct = unityplayer.GetStatic<AndroidJavaObject>("currentActivity");
+            byte[] stueplan = currentAct.Call<byte[]>("getPNG", new object[] { pdfArray[0].Path });
+            byte[] soejler = currentAct.Call<byte[]>("getPNG", new object[] { pdfArray[1].Path });
+            //byte[] stueplan = File.ReadAllBytes(@"C:\Users\Viktor\Pictures\loftplan_gennemsigtig.png");
+            //byte[] soejler = File.ReadAllBytes(@"C:\Users\Viktor\Pictures\stueplan_gennemsigtig.png");
             Texture2D stueplanTex = new Texture2D(2, 2);
             Texture2D soejlerTex = new Texture2D(2, 2);
             bool isLoaded = stueplanTex.LoadImage(stueplan);
