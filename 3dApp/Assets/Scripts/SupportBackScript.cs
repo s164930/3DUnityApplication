@@ -6,12 +6,14 @@ public class SupportBackScript : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        if(Application.platform == RuntimePlatform.Android)
+#if UNITY_ANDROID
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (Input.GetKey(KeyCode.Escape))
-            {
-                Application.Quit();
-            }
+            AndroidJavaClass unityplayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaObject jo = unityplayer.GetStatic<AndroidJavaObject>("currentActivity");
+            jo.Call("closeActivity");
         }
+#endif
+
     }
 }
