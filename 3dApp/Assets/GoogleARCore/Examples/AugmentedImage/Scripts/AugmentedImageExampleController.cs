@@ -60,6 +60,7 @@ namespace GoogleARCore.Examples.AugmentedImage
             // Check that motion tracking is tracking.
             if (Session.Status != SessionStatus.Tracking)
             {
+                Debug.Log("Motion tracking is not tracking");
                 return;
             }
 
@@ -70,18 +71,23 @@ namespace GoogleARCore.Examples.AugmentedImage
             // have a visualizer. Remove visualizers for stopped images.
             foreach (var image in m_TempAugmentedImages)
             {
+                Debug.Log("There are images in the augmented images list");
                 AugmentedImageVisualizer visualizer = null;
                 m_Visualizers.TryGetValue(image.DatabaseIndex, out visualizer);
                 if (image.TrackingState == TrackingState.Tracking && visualizer == null)
                 {
+                    Debug.Log("The images tracking state is tracking");
                     // Create an anchor to ensure that ARCore keeps tracking this augmented image.
                     Anchor anchor = image.CreateAnchor(image.CenterPose);
                     visualizer = (AugmentedImageVisualizer)Instantiate(AugmentedImageVisualizerPrefab, anchor.transform);
+                    Debug.Log(anchor.transform);
                     visualizer.Image = image;
                     m_Visualizers.Add(image.DatabaseIndex, visualizer);
+                    Debug.Log("We have instantiated the prefab on the image");
                 }
                 else if (image.TrackingState == TrackingState.Stopped && visualizer != null)
                 {
+                    Debug.Log("The image has stopped tracking");
                     m_Visualizers.Remove(image.DatabaseIndex);
                     GameObject.Destroy(visualizer.gameObject);
                 }
@@ -92,11 +98,12 @@ namespace GoogleARCore.Examples.AugmentedImage
             {
                 if (visualizer.Image.TrackingState == TrackingState.Tracking)
                 {
+                    Debug.Log("There is a tracking image, and the overlay is turned off");
                     FitToScanOverlay.SetActive(false);
                     return;
                 }
             }
-
+            Debug.Log("There is no tracking image, and the overlay is active");
             FitToScanOverlay.SetActive(true);
         }
     }
